@@ -12,6 +12,7 @@ package org.eclipse.collections.impl.bimap.mutable;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.collections.api.RichIterable;
@@ -287,6 +288,16 @@ public class SynchronizedBiMap<K, V> extends AbstractSynchronizedMapIterable<K, 
         synchronized (this.lock)
         {
             this.getDelegate().put(key, value);
+            return this;
+        }
+    }
+
+    @Override
+    public MutableBiMap<K, V> withMap(Map<K, V> map)
+    {
+        synchronized (this.lock)
+        {
+            map.forEach(this::put);
             return this;
         }
     }

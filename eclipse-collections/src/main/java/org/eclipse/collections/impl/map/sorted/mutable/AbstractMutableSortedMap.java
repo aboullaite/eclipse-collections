@@ -10,6 +10,8 @@
 
 package org.eclipse.collections.impl.map.sorted.mutable;
 
+import java.util.Map;
+
 import org.eclipse.collections.api.LazyIterable;
 import org.eclipse.collections.api.block.function.Function;
 import org.eclipse.collections.api.block.function.Function2;
@@ -86,6 +88,13 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMutableMapI
     public MutableSortedMap<K, V> withKeyValue(K key, V value)
     {
         this.put(key, value);
+        return this;
+    }
+
+    @Override
+    public MutableSortedMap<K, V> withMap(Map<K, V> map)
+    {
+        map.forEach(this::put);
         return this;
     }
 

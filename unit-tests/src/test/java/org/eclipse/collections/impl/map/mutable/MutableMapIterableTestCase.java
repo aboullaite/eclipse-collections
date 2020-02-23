@@ -12,9 +12,12 @@ package org.eclipse.collections.impl.map.mutable;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
@@ -561,6 +564,50 @@ public abstract class MutableMapIterableTestCase extends MapIterableTestCase
     }
 
     @Test
+    public void withMap()
+    {
+        MutableMapIterable<String, Integer> map = this.newMapWithKeysValues("A", 1, "B", 2);
+        Map<String, Integer> simpleMap = Stream.of(new Object[][] {
+                { "B", 22 },
+                { "C", 3 },
+        }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+        MutableMapIterable<String, Integer> mapWith = map.withMap(simpleMap);
+        Assert.assertSame(map, mapWith);
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("A", 1, "B", 22, "C", 3), mapWith);
+    }
+
+    @Test
+    public void withMapEmpty()
+    {
+        MutableMapIterable<String, Integer> map = this.newMapWithKeysValues("A", 1, "B", 2);
+        MutableMapIterable<String, Integer> mapWith = map.withMap(Collections.emptyMap());
+        Assert.assertSame(map, mapWith);
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("A", 1, "B", 2), mapWith);
+    }
+
+    @Test
+    public void withMapTargetEmpty()
+    {
+        MutableMapIterable<String, Integer> map = this.newMap();
+        Map<String, Integer> simpleMap = Stream.of(new Object[][] {
+                { "A", 1 },
+                { "B", 2 },
+        }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+        MutableMapIterable<String, Integer> mapWith = map.withMap(simpleMap);
+        Assert.assertSame(map, mapWith);
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("A", 1, "B", 2), mapWith);
+    }
+
+    @Test
+    public void withMapEmptyAndTargetEmpty()
+    {
+        MutableMapIterable<String, Integer> map = this.newMap();
+        MutableMapIterable<String, Integer> mapWith = map.withMap(Collections.emptyMap());
+        Assert.assertSame(map, mapWith);
+        Verify.assertMapsEqual(UnifiedMap.newMap(), mapWith);
+    }
+
+    @Test
     public void withAllKeyValues()
     {
         MutableMapIterable<String, Integer> map = this.newMapWithKeysValues("A", 1, "B", 2);
@@ -638,6 +685,7 @@ public abstract class MutableMapIterableTestCase extends MapIterableTestCase
     public void updateValue()
     {
         MutableMapIterable<Integer, Integer> map = this.newMap();
+
         Iterate.forEach(Interval.oneTo(1000), each -> map.updateValue(each % 10, () -> 0, integer -> integer + 1));
         Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));

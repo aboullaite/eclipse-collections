@@ -10,6 +10,8 @@
 
 package org.eclipse.collections.api.map;
 
+import java.util.Map;
+
 import org.eclipse.collections.api.bag.MutableBag;
 import org.eclipse.collections.api.bag.primitive.MutableBooleanBag;
 import org.eclipse.collections.api.bag.primitive.MutableByteBag;
@@ -194,6 +196,9 @@ public interface MutableMap<K, V>
 
     @Override
     MutableMap<K, V> withKeyValue(K key, V value);
+
+    @Override
+    MutableMap<K, V> withMap(Map<K, V> map);
 
     @Override
     MutableMap<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues);

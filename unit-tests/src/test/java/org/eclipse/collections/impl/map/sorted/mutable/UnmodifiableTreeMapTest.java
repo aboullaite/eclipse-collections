@@ -10,7 +10,10 @@
 
 package org.eclipse.collections.impl.map.sorted.mutable;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.collections.api.map.sorted.MutableSortedMap;
 import org.eclipse.collections.impl.block.factory.Functions;
@@ -346,6 +349,36 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void withKeyValue()
     {
         this.newMapWithKeysValues(1, "One", 2, "2").withKeyValue(null, null);
+    }
+
+    @Override
+    @Test
+    public void withMap()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newMapWithKeyValue(1, 'a').withMap(
+                Stream.of(new Object[][] {{ 1, 'a' }}).collect(Collectors.toMap(data -> (Integer) data[0], data -> (Character) data[1]))));
+    }
+
+    @Override
+    @Test
+    public void withMapEmpty()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newMapWithKeyValue(1, 'a').withMap(Collections.emptyMap()));
+    }
+
+    @Override
+    @Test
+    public void withMapTargetEmpty()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newMap().withMap(
+                Stream.of(new Object[][] {{ 1, 'a' }}).collect(Collectors.toMap(data -> (Integer) data[0], data -> (Character) data[1]))));
+    }
+
+    @Override
+    @Test
+    public void withMapEmptyAndTargetEmpty()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newMap().withMap(Collections.emptyMap()));
     }
 
     @Override

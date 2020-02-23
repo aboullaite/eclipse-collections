@@ -153,6 +153,25 @@ public interface MutableMapIterable<K, V> extends MapIterable<K, V>, Map<K, V>
     MutableMapIterable<K, V> withKeyValue(K key, V value);
 
     /**
+     * This method allows mutable, fixed size, and immutable maps the ability to add elements of a Map to their existing
+     * elements. In order to support fixed size maps, a new instance of a map would have to be returned including the
+     * keys and values of the original plus the additional key and value. In the case of mutable maps, the original map
+     * is modified and then returned. In order to use this method properly with mutable and fixed size maps the
+     * following approach must be taken:
+     * <p>
+     * <pre>
+     * map = map.withKeyValue("new key", "new value");
+     * </pre>
+     * In the case of FixedSizeMap, a new instance will be returned by withKeyValue, and any variables that
+     * previously referenced the original map will need to be redirected to reference the new instance. In the case
+     * of a FastMap or UnifiedMap, you will be replacing the reference to map with map, since FastMap and UnifiedMap
+     * will both return "this" after calling put on themselves.
+     *
+     * @see #put(Object, Object)
+     */
+    MutableMapIterable<K, V> withMap(Map<K, V> map);
+
+    /**
      * This method allows mutable, fixed size, and immutable maps the ability to add elements to their existing
      * elements. In order to support fixed size maps, a new instance of a map would have to be returned including the
      * keys and values of the original plus all of the additional keys and values. In the case of mutable maps, the

@@ -115,6 +115,16 @@ public class SynchronizedMutableMap<K, V>
     }
 
     @Override
+    public MutableMap<K, V> withMap(Map<K, V> map)
+    {
+        synchronized (this.lock)
+        {
+            map.forEach(this::put);
+            return this;
+        }
+    }
+
+    @Override
     public MutableMap<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValuePairs)
     {
         return this.withAllKeyValues(ArrayAdapter.adapt(keyValuePairs));

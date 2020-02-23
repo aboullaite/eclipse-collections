@@ -10,9 +10,12 @@
 
 package org.eclipse.collections.impl.bimap.mutable;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.collections.api.bimap.MutableBiMap;
 import org.eclipse.collections.api.block.function.Function2;
@@ -159,6 +162,36 @@ public class UnmodifiableBiMapTest extends AbstractMutableBiMapTestCase
     public void withKeyValue()
     {
         Verify.assertThrows(UnsupportedOperationException.class, () -> this.getEmptyMap().withKeyValue(1, 'a'));
+    }
+
+    @Override
+    @Test
+    public void withMap()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newMapWithKeyValue(1, 'a').withMap(
+                Stream.of(new Object[][] {{ 1, 'a' }}).collect(Collectors.toMap(data -> (Integer) data[0], data -> (Character) data[1]))));
+    }
+
+    @Override
+    @Test
+    public void withMapEmpty()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newMapWithKeyValue(1, 'a').withMap(Collections.emptyMap()));
+    }
+
+    @Override
+    @Test
+    public void withMapTargetEmpty()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getEmptyMap().withMap(
+                Stream.of(new Object[][] {{ 1, 'a' }}).collect(Collectors.toMap(data -> (Integer) data[0], data -> (Character) data[1]))));
+    }
+
+    @Override
+    @Test
+    public void withMapEmptyAndTargetEmpty()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getEmptyMap().withMap(Collections.emptyMap()));
     }
 
     @Override

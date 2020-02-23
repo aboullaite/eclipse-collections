@@ -154,6 +154,13 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
     }
 
     @Override
+    public MutableBiMap<K, V> withMap(Map<K, V> map)
+    {
+        map.forEach(this::put);
+        return this;
+    }
+
+    @Override
     public MutableBiMap<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues)
     {
         for (Pair<? extends K, ? extends V> keyVal : keyValues)

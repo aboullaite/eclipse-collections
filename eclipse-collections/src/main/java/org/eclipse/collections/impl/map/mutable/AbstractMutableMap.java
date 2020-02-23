@@ -11,6 +11,7 @@
 package org.eclipse.collections.impl.map.mutable;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.collections.api.bag.MutableBag;
 import org.eclipse.collections.api.bag.primitive.MutableBooleanBag;
@@ -292,6 +293,13 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMutableMapIterabl
     public MutableMap<K, V> withKeyValue(K key, V value)
     {
         this.put(key, value);
+        return this;
+    }
+
+    @Override
+    public MutableMap<K, V> withMap(Map<K, V> map)
+    {
+        map.forEach(this::put);
         return this;
     }
 
